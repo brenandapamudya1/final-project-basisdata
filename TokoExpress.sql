@@ -1,4 +1,3 @@
 CREATE DATABASE EXPRESS;
 USE EXPRESS;
 
--- nambah lagi
