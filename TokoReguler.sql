@@ -13,7 +13,7 @@ CREATE TABLE toko (
     jam_buka      TIME NOT NULL DEFAULT '08:00:00',
     jam_tutup     TIME NOT NULL DEFAULT '21:00:00',
     status        ENUM('aktif','nonaktif') NOT NULL DEFAULT 'aktif'
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 2. DIVISI / JABATAN
@@ -27,7 +27,7 @@ CREATE TABLE divisi (
     nama_divisi   VARCHAR(50) NOT NULL,
     deskripsi     VARCHAR(150),
     level_jabatan ENUM('staff','supervisor','manager') NOT NULL DEFAULT 'staff'
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 3. PEGAWAI
@@ -45,7 +45,7 @@ CREATE TABLE pegawai (
     tgl_masuk     DATE NOT NULL,
     status        ENUM('aktif','nonaktif','cuti') NOT NULL DEFAULT 'aktif',
     FOREIGN KEY (id_toko) REFERENCES toko(id_toko)
-);
+) ENGINE=InnoDB;
  
 CREATE TABLE pegawai_divisi (
     id            INT PRIMARY KEY AUTO_INCREMENT,
@@ -56,7 +56,7 @@ CREATE TABLE pegawai_divisi (
     is_primary    ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
     FOREIGN KEY (id_pegawai) REFERENCES pegawai(id_pegawai),
     FOREIGN KEY (id_divisi)  REFERENCES divisi(id_divisi)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 4. ABSENSI PEGAWAI
@@ -70,7 +70,7 @@ CREATE TABLE absensi (
     status        ENUM('hadir','izin','sakit','alpha') NOT NULL DEFAULT 'hadir',
     keterangan    VARCHAR(150),
     FOREIGN KEY (id_pegawai) REFERENCES pegawai(id_pegawai)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 5. MASTER BARANG (independen dari gudang, variasi lebih luas)
@@ -82,19 +82,7 @@ CREATE TABLE kategori_barang (
     suhu_min          DECIMAL(5,1),
     suhu_max          DECIMAL(5,1),
     keterangan        VARCHAR(100)
-);
- 
-CREATE TABLE supplier (
-    id_supplier   CHAR(6) PRIMARY KEY,
-    nama          VARCHAR(80) NOT NULL,
-    kontak_pic    VARCHAR(60),
-    no_hp         VARCHAR(20),
-    alamat        VARCHAR(150),
-    kota          VARCHAR(50),
-    jadwal_kirim  VARCHAR(100),
-    top_hari      TINYINT UNSIGNED DEFAULT 30,
-    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya'
-);
+) ENGINE=InnoDB;
  
 CREATE TABLE barang (
     id_barang     CHAR(8) PRIMARY KEY,
@@ -105,8 +93,8 @@ CREATE TABLE barang (
     berat_gram    DECIMAL(8,2),
     is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_kategori) REFERENCES kategori_barang(id_kategori),
-    FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier)
-);
+    FOREIGN KEY (id_supplier) REFERENCES gudang.supplier(id_supplier)
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 6. HARGA & APPROVAL
@@ -128,7 +116,7 @@ CREATE TABLE harga_barang (
     FOREIGN KEY (id_toko)        REFERENCES toko(id_toko),
     FOREIGN KEY (diinput_oleh)   REFERENCES pegawai(id_pegawai),
     FOREIGN KEY (disetujui_oleh) REFERENCES pegawai(id_pegawai)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 7. DISPLAY BARANG
@@ -146,7 +134,7 @@ CREATE TABLE display_barang (
     FOREIGN KEY (id_toko)       REFERENCES toko(id_toko),
     FOREIGN KEY (id_harga)      REFERENCES harga_barang(id_harga),
     FOREIGN KEY (diupdate_oleh) REFERENCES pegawai(id_pegawai)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 8. STOK & RESTOCK
@@ -161,7 +149,7 @@ CREATE TABLE stok_toko (
                            ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_barang) REFERENCES barang(id_barang),
     FOREIGN KEY (id_toko)   REFERENCES toko(id_toko)
-);
+) ENGINE=InnoDB;
  
 CREATE TABLE jadwal_restock (
     id_jadwal     INT PRIMARY KEY AUTO_INCREMENT,
@@ -175,7 +163,7 @@ CREATE TABLE jadwal_restock (
     FOREIGN KEY (id_barang)   REFERENCES barang(id_barang),
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko),
     FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 9. HUTANG SUPPLIER
@@ -190,9 +178,9 @@ CREATE TABLE hutang_supplier (
     status_hutang   ENUM('belum_lunas','lunas','sebagian') NOT NULL DEFAULT 'belum_lunas',
     tgl_lunas       DATE,
     keterangan      VARCHAR(150),
-    FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier),
+    FOREIGN KEY (id_supplier) REFERENCES gudang.supplier(id_supplier),
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 10. CUSTOMER
@@ -204,7 +192,7 @@ CREATE TABLE customer (
     email         VARCHAR(80),
     tgl_daftar    DATE NOT NULL,
     poin_loyalty  INT NOT NULL DEFAULT 0
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 11. PROMO (per item: diskon % atau nominal)
@@ -219,7 +207,7 @@ CREATE TABLE promo (
     tgl_selesai   DATE NOT NULL,
     is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_barang) REFERENCES barang(id_barang)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 12. METODE PEMBAYARAN (master)
@@ -228,7 +216,7 @@ CREATE TABLE metode_pembayaran (
     id_metode     CHAR(4) PRIMARY KEY,
     nama_metode   ENUM('tunai','debit','qris','transfer','tarik_tunai') NOT NULL,
     keterangan    VARCHAR(100)
-);
+) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
 -- 13. TRANSAKSI PENJUALAN
@@ -246,7 +234,7 @@ CREATE TABLE transaksi_penjualan (
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko),
     FOREIGN KEY (id_customer) REFERENCES customer(id_customer),
     FOREIGN KEY (id_pegawai)  REFERENCES pegawai(id_pegawai)
-);
+) ENGINE=InnoDB;
  
 CREATE TABLE detail_transaksi (
     id_detail     INT PRIMARY KEY AUTO_INCREMENT,
@@ -260,7 +248,7 @@ CREATE TABLE detail_transaksi (
     FOREIGN KEY (id_transaksi) REFERENCES transaksi_penjualan(id_transaksi),
     FOREIGN KEY (id_barang)    REFERENCES barang(id_barang),
     FOREIGN KEY (id_promo)     REFERENCES promo(id_promo)
-);
+) ENGINE=InnoDB;
  
 CREATE TABLE pembayaran (
     id_pembayaran INT PRIMARY KEY AUTO_INCREMENT,
@@ -271,7 +259,7 @@ CREATE TABLE pembayaran (
     tgl_bayar     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_transaksi) REFERENCES transaksi_penjualan(id_transaksi),
     FOREIGN KEY (id_metode)    REFERENCES metode_pembayaran(id_metode)
-);
+) ENGINE=InnoDB;
  
 -- ============================================================
 -- DATA DUMMY
@@ -326,13 +314,6 @@ INSERT INTO kategori_barang (id_kategori, nama_kategori, perlu_penanganan, suhu_
 ('KR0005','Household','Tidak', NULL, NULL,'Sabun, deterjen, perlengkapan rumah'),
 ('KR0006','Minuman','Tidak', NULL, NULL,'Minuman kemasan'),
 ('KR0007','Snack','Tidak', NULL, NULL,'Makanan ringan');
- 
-INSERT INTO supplier (id_supplier, nama, kontak_pic, no_hp, alamat, kota, jadwal_kirim, top_hari, is_aktif) VALUES
-('SR0001','PT Sembako Makmur','Rudi','081298770001','Jl. Industri 5','Surabaya','Senin, Kamis',30,'Ya'),
-('SR0002','CV Sayur Segar Tani','Siti','081298770002','Jl. Industri 6','Surabaya','Setiap hari',7,'Ya'),
-('SR0003','PT Beku Sejahtera','Lina','081298770003','Jl. Industri 7','Surabaya','Senin, Rabu, Jumat',21,'Ya'),
-('SR0004','UD Dairy Prima','Bayu','081298770004','Jl. Industri 8','Surabaya','Selasa, Jumat',14,'Ya'),
-('SR0005','PT Household Indo','Fitri','081298770005','Jl. Industri 9','Surabaya','Rabu',45,'Ya');
  
 INSERT INTO barang (id_barang, nama_barang, id_kategori, id_supplier, satuan, berat_gram, is_aktif) VALUES
 ('BG000001','Beras Premium 5kg','KR0001','SR0001','karung',5000.00,'Ya'),
