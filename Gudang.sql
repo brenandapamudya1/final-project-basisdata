@@ -1,4 +1,5 @@
 create database GUDANG;
+use GUDANG;
 
 -- ------------------------------------------------------------
 -- 1. TIPE TOKO
