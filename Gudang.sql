@@ -61,7 +61,7 @@ CREATE TABLE pegawai_divisi (
     id_divisi     CHAR(6) NOT NULL,
     tgl_mulai     DATE NOT NULL,
     tgl_selesai   DATE,
-    utama         ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
+    is_primary    ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
     FOREIGN KEY (id_pegawai) REFERENCES pegawai(id_pegawai),
     FOREIGN KEY (id_divisi)  REFERENCES divisi(id_divisi)
 ) ENGINE=InnoDB;
@@ -109,7 +109,7 @@ CREATE TABLE supplier (
     kota          VARCHAR(50),
     jadwal_kirim  VARCHAR(100),
     top_hari      TINYINT UNSIGNED DEFAULT 30,
-    aktif         ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya'
+    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya'
 ) ENGINE=InnoDB;
  
 -- ------------------------------------------------------------
@@ -125,7 +125,7 @@ CREATE TABLE barang (
     satuan        VARCHAR(20) NOT NULL,
     berat_gram    DECIMAL(8,2),
     tipe_toko     ENUM('DC','Reguler','Express') NOT NULL,
-    aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
+    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_kategori) REFERENCES kategori_barang(id_kategori),
     FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier)
 ) ENGINE=InnoDB;
@@ -196,7 +196,7 @@ CREATE TABLE jadwal_restock (
     frekuensi     ENUM('harian','mingguan','bulanan') NOT NULL DEFAULT 'mingguan',
     hari_restock  VARCHAR(50),
     jumlah_order  INT NOT NULL DEFAULT 0,
-    aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
+    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_barang)   REFERENCES barang(id_barang),
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko),
     FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier)
