@@ -150,7 +150,7 @@ CREATE TABLE barang (
     berat_gram    DECIMAL(8,2),
     is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_kategori) REFERENCES kategori_barang(id_kategori),
-    FOREIGN KEY (id_supplier) REFERENCES gudang.supplier(id_supplier)
+    FOREIGN KEY (id_supplier) REFERENCES GUDANG.supplier(id_supplier)
 ) ENGINE=InnoDB;
 
 -- 8. BARANG
@@ -306,7 +306,7 @@ CREATE TABLE hutang_supplier (
     status_hutang   ENUM('belum_lunas','lunas','sebagian') NOT NULL DEFAULT 'belum_lunas',
     tgl_lunas       DATE,
     keterangan      VARCHAR(150),
-    FOREIGN KEY (id_supplier) REFERENCES gudang.supplier(id_supplier),
+    FOREIGN KEY (id_supplier) REFERENCES GUDANG.supplier(id_supplier),
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko)
 ) ENGINE=InnoDB;
 
