@@ -259,6 +259,7 @@ CREATE TABLE rekap_stok_toko (
     jumlah_stok   INT NOT NULL DEFAULT 0,
     stok_minimal  INT NOT NULL DEFAULT 0,
     tgl_sync      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_rekap_toko_barang (id_toko, id_barang),
     FOREIGN KEY (id_toko)   REFERENCES toko(id_toko),
     FOREIGN KEY (id_barang) REFERENCES barang(id_barang)
 ) ENGINE=InnoDB;
