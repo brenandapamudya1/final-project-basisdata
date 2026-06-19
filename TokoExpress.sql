@@ -9,7 +9,7 @@ CREATE TABLE toko (
     telp          VARCHAR(20),
     jam_buka      TIME NOT NULL DEFAULT '06:00:00',
     jam_tutup     TIME NOT NULL DEFAULT '23:00:00',
-    is_24_jam     ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
+    24_jam     ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
     status        ENUM('aktif','nonaktif') NOT NULL DEFAULT 'aktif'
 ) ENGINE=InnoDB;
 
@@ -71,7 +71,7 @@ CREATE TABLE pegawai_divisi (
     id_divisi     CHAR(6) NOT NULL,
     tgl_mulai     DATE NOT NULL,
     tgl_selesai   DATE,
-    is_primary    ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
+    utama         ENUM('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
     FOREIGN KEY (id_pegawai) REFERENCES pegawai(id_pegawai),
     FOREIGN KEY (id_divisi)  REFERENCES divisi(id_divisi)
 ) ENGINE=InnoDB;
@@ -148,7 +148,7 @@ CREATE TABLE barang (
     id_supplier   CHAR(6) NOT NULL,
     satuan        VARCHAR(20) NOT NULL,
     berat_gram    DECIMAL(8,2),
-    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
+    aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_kategori) REFERENCES kategori_barang(id_kategori),
     FOREIGN KEY (id_supplier) REFERENCES gudang.supplier(id_supplier)
 ) ENGINE=InnoDB;
@@ -279,7 +279,7 @@ CREATE TABLE jadwal_restock (
     frekuensi     ENUM('harian','mingguan','bulanan') NOT NULL DEFAULT 'harian',
     hari_restock  VARCHAR(50),
     jumlah_order  INT NOT NULL DEFAULT 0,
-    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
+    aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_barang)   REFERENCES barang(id_barang),
     FOREIGN KEY (id_toko)     REFERENCES toko(id_toko),
     FOREIGN KEY (id_supplier) REFERENCES supplier(id_supplier)
@@ -349,7 +349,7 @@ CREATE TABLE promo (
     nilai_diskon  DECIMAL(10,2) NOT NULL,
     tgl_mulai     DATE NOT NULL,
     tgl_selesai   DATE NOT NULL,
-    is_aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
+    aktif      ENUM('Ya','Tidak') NOT NULL DEFAULT 'Ya',
     FOREIGN KEY (id_barang) REFERENCES barang(id_barang)
 ) ENGINE=InnoDB;
 
