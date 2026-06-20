@@ -4,7 +4,6 @@
 --  dashboard. Jalankan setelah semua database terisi data.
 -- ============================================================
 
-
 -- ============================================================
 --  BAGIAN 1 — STATIC PIVOT
 -- ============================================================
@@ -21,14 +20,38 @@ SELECT
     b.id_barang,
     b.nama_barang,
     kb.nama_kategori,
-    SUM(CASE WHEN s.id_toko = 'TE001' THEN s.jumlah ELSE 0 END) AS stok_TE001,
-    SUM(CASE WHEN s.id_toko = 'TE002' THEN s.jumlah ELSE 0 END) AS stok_TE002,
-    SUM(CASE WHEN s.id_toko = 'TE001' THEN s.stok_minimal ELSE 0 END) AS minimal_TE001,
-    SUM(CASE WHEN s.id_toko = 'TE002' THEN s.stok_minimal ELSE 0 END) AS minimal_TE002
-FROM stok_toko s
-JOIN barang b          ON s.id_barang    = b.id_barang
-JOIN kategori_barang kb ON b.id_kategori = kb.id_kategori
-GROUP BY b.id_barang, b.nama_barang, kb.nama_kategori
+    SUM(
+        CASE
+            WHEN s.id_toko = 'TE001' THEN s.jumlah
+            ELSE 0
+        END
+    ) AS stok_TE001,
+    SUM(
+        CASE
+            WHEN s.id_toko = 'TE002' THEN s.jumlah
+            ELSE 0
+        END
+    ) AS stok_TE002,
+    SUM(
+        CASE
+            WHEN s.id_toko = 'TE001' THEN s.stok_minimal
+            ELSE 0
+        END
+    ) AS minimal_TE001,
+    SUM(
+        CASE
+            WHEN s.id_toko = 'TE002' THEN s.stok_minimal
+            ELSE 0
+        END
+    ) AS minimal_TE002
+FROM
+    stok_toko s
+    JOIN barang b ON s.id_barang = b.id_barang
+    JOIN kategori_barang kb ON b.id_kategori = kb.id_kategori
+GROUP BY
+    b.id_barang,
+    b.nama_barang,
+    kb.nama_kategori
 ORDER BY kb.nama_kategori, b.nama_barang;
 
 -- ------------------------------------------------------------
@@ -39,13 +62,36 @@ ORDER BY kb.nama_kategori, b.nama_barang;
 USE EXPRESS;
 
 SELECT
-    DATE_FORMAT(tgl_transaksi, '%Y-%m')                                         AS bulan,
-    SUM(CASE WHEN id_toko = 'TE001' AND status = 'selesai' THEN total_bayar ELSE 0 END) AS omzet_TE001,
-    SUM(CASE WHEN id_toko = 'TE002' AND status = 'selesai' THEN total_bayar ELSE 0 END) AS omzet_TE002,
-    COUNT(CASE WHEN id_toko = 'TE001' AND status = 'selesai' THEN 1 END)        AS trx_TE001,
-    COUNT(CASE WHEN id_toko = 'TE002' AND status = 'selesai' THEN 1 END)        AS trx_TE002
+    DATE_FORMAT(tgl_transaksi, '%Y-%m') AS bulan,
+    SUM(
+        CASE
+            WHEN id_toko = 'TE001'
+            AND status = 'selesai' THEN total_bayar
+            ELSE 0
+        END
+    ) AS omzet_TE001,
+    SUM(
+        CASE
+            WHEN id_toko = 'TE002'
+            AND status = 'selesai' THEN total_bayar
+            ELSE 0
+        END
+    ) AS omzet_TE002,
+    COUNT(
+        CASE
+            WHEN id_toko = 'TE001'
+            AND status = 'selesai' THEN 1
+        END
+    ) AS trx_TE001,
+    COUNT(
+        CASE
+            WHEN id_toko = 'TE002'
+            AND status = 'selesai' THEN 1
+        END
+    ) AS trx_TE002
 FROM transaksi_penjualan
-GROUP BY DATE_FORMAT(tgl_transaksi, '%Y-%m')
+GROUP BY
+    DATE_FORMAT(tgl_transaksi, '%Y-%m')
 ORDER BY bulan;
 
 -- ------------------------------------------------------------
@@ -58,17 +104,42 @@ USE GUDANG;
 SELECT
     p.id_pegawai,
     p.nama,
-    d.nama_divisi                                                                AS divisi_utama,
-    SUM(CASE WHEN a.status = 'hadir'  THEN 1 ELSE 0 END)                       AS hadir,
-    SUM(CASE WHEN a.status = 'izin'   THEN 1 ELSE 0 END)                       AS izin,
-    SUM(CASE WHEN a.status = 'sakit'  THEN 1 ELSE 0 END)                       AS sakit,
-    SUM(CASE WHEN a.status = 'alpha'  THEN 1 ELSE 0 END)                       AS alpha,
-    COUNT(a.id_absensi)                                                          AS total_hari_tercatat
-FROM pegawai p
-LEFT JOIN absensi a ON p.id_pegawai = a.id_pegawai
-LEFT JOIN pegawai_divisi pd ON p.id_pegawai = pd.id_pegawai AND pd.is_primary = 'Ya'
-LEFT JOIN divisi d ON pd.id_divisi = d.id_divisi
-GROUP BY p.id_pegawai, p.nama, d.nama_divisi
+    d.nama_divisi AS divisi_utama,
+    SUM(
+        CASE
+            WHEN a.status = 'hadir' THEN 1
+            ELSE 0
+        END
+    ) AS hadir,
+    SUM(
+        CASE
+            WHEN a.status = 'izin' THEN 1
+            ELSE 0
+        END
+    ) AS izin,
+    SUM(
+        CASE
+            WHEN a.status = 'sakit' THEN 1
+            ELSE 0
+        END
+    ) AS sakit,
+    SUM(
+        CASE
+            WHEN a.status = 'alpha' THEN 1
+            ELSE 0
+        END
+    ) AS alpha,
+    COUNT(a.id_absensi) AS total_hari_tercatat
+FROM
+    pegawai p
+    LEFT JOIN absensi a ON p.id_pegawai = a.id_pegawai
+    LEFT JOIN pegawai_divisi pd ON p.id_pegawai = pd.id_pegawai
+    AND pd.is_primary = 'Ya'
+    LEFT JOIN divisi d ON pd.id_divisi = d.id_divisi
+GROUP BY
+    p.id_pegawai,
+    p.nama,
+    d.nama_divisi
 ORDER BY p.id_pegawai;
 
 -- ------------------------------------------------------------
@@ -83,17 +154,41 @@ SELECT
     b.id_barang,
     b.nama_barang,
     b.tipe_toko,
-    SUM(CASE WHEN h.status = 'approved' THEN 1 ELSE 0 END)                     AS approved,
-    SUM(CASE WHEN h.status = 'pending'  THEN 1 ELSE 0 END)                     AS pending,
-    SUM(CASE WHEN h.status = 'rejected' THEN 1 ELSE 0 END)                     AS rejected,
+    SUM(
+        CASE
+            WHEN h.status = 'approved' THEN 1
+            ELSE 0
+        END
+    ) AS approved,
+    SUM(
+        CASE
+            WHEN h.status = 'pending' THEN 1
+            ELSE 0
+        END
+    ) AS pending,
+    SUM(
+        CASE
+            WHEN h.status = 'rejected' THEN 1
+            ELSE 0
+        END
+    ) AS rejected,
     -- Harga jual aktif (approved, berlaku, belum berakhir)
-    MAX(CASE WHEN h.status = 'approved' AND (h.tgl_berakhir IS NULL OR h.tgl_berakhir >= CURDATE())
-             THEN h.harga_jual END)                                              AS harga_jual_aktif
+    MAX(
+        CASE
+            WHEN h.status = 'approved'
+            AND (
+                h.tgl_berakhir IS NULL
+                OR h.tgl_berakhir >= CURDATE()
+            ) THEN h.harga_jual
+        END
+    ) AS harga_jual_aktif
 FROM harga_barang h
-JOIN barang b ON h.id_barang = b.id_barang
-GROUP BY b.id_barang, b.nama_barang, b.tipe_toko
+    JOIN barang b ON h.id_barang = b.id_barang
+GROUP BY
+    b.id_barang,
+    b.nama_barang,
+    b.tipe_toko
 ORDER BY b.tipe_toko, b.nama_barang;
-
 
 -- ============================================================
 --  BAGIAN 2 — TEMPORARY TABLE
@@ -117,20 +212,23 @@ SELECT
     s.id_barang,
     b.nama_barang,
     kb.nama_kategori,
-    s.jumlah                      AS stok_saat_ini,
+    s.jumlah AS stok_saat_ini,
     s.stok_minimal,
-    (s.stok_minimal - s.jumlah)  AS kekurangan,
-    sp.nama                       AS nama_supplier,
-    sp.no_hp                      AS kontak_supplier,
-    jr.jumlah_order               AS qty_restock_biasa
-FROM stok_toko s
-JOIN barang b          ON s.id_barang    = b.id_barang
-JOIN kategori_barang kb ON b.id_kategori = kb.id_kategori
-JOIN toko t            ON s.id_toko      = t.id_toko
-JOIN GUDANG.supplier sp ON b.id_supplier = sp.id_supplier
-LEFT JOIN jadwal_restock jr
-       ON jr.id_barang = s.id_barang AND jr.id_toko = s.id_toko AND jr.is_aktif = 'Ya'
-WHERE s.jumlah < s.stok_minimal
+    (s.stok_minimal - s.jumlah) AS kekurangan,
+    sp.nama AS nama_supplier,
+    sp.no_hp AS kontak_supplier,
+    jr.jumlah_order AS qty_restock_biasa
+FROM
+    stok_toko s
+    JOIN barang b ON s.id_barang = b.id_barang
+    JOIN kategori_barang kb ON b.id_kategori = kb.id_kategori
+    JOIN toko t ON s.id_toko = t.id_toko
+    JOIN GUDANG.supplier sp ON b.id_supplier = sp.id_supplier
+    LEFT JOIN jadwal_restock jr ON jr.id_barang = s.id_barang
+    AND jr.id_toko = s.id_toko
+    AND jr.is_aktif = 'Ya'
+WHERE
+    s.jumlah < s.stok_minimal
 ORDER BY kekurangan DESC;
 
 -- Preview hasil
@@ -149,16 +247,20 @@ CREATE TEMPORARY TABLE tmp_ringkasan_penjualan_harian AS
 SELECT
     tp.id_toko,
     t.nama_toko,
-    COUNT(tp.id_transaksi)         AS total_transaksi,
-    SUM(tp.total_belanja)          AS total_belanja,
-    SUM(tp.total_diskon)           AS total_diskon,
-    SUM(tp.total_bayar)            AS total_omzet,
+    COUNT(tp.id_transaksi) AS total_transaksi,
+    SUM(tp.total_belanja) AS total_belanja,
+    SUM(tp.total_diskon) AS total_diskon,
+    SUM(tp.total_bayar) AS total_omzet,
     COUNT(DISTINCT tp.id_customer) AS jumlah_customer_unik
-FROM transaksi_penjualan tp
-JOIN toko t ON tp.id_toko = t.id_toko
-WHERE DATE(tp.tgl_transaksi) = CURDATE()
-  AND tp.status = 'selesai'
-GROUP BY tp.id_toko, t.nama_toko;
+FROM
+    transaksi_penjualan tp
+    JOIN toko t ON tp.id_toko = t.id_toko
+WHERE
+    DATE(tp.tgl_transaksi) = CURDATE()
+    AND tp.status = 'selesai'
+GROUP BY
+    tp.id_toko,
+    t.nama_toko;
 
 -- Preview hasil
 SELECT * FROM tmp_ringkasan_penjualan_harian;
@@ -185,13 +287,15 @@ SELECT
     h.harga_jual,
     h.tgl_berlaku,
     h.catatan,
-    p.nama                                          AS diinput_oleh,
-    DATEDIFF(CURDATE(), h.tgl_berlaku)              AS hari_menunggu
-FROM harga_barang h
-JOIN barang b   ON h.id_barang    = b.id_barang
-JOIN toko t     ON h.id_toko      = t.id_toko
-JOIN pegawai p  ON h.diinput_oleh = p.id_pegawai
-WHERE h.status = 'pending'
+    p.nama AS diinput_oleh,
+    DATEDIFF(CURDATE(), h.tgl_berlaku) AS hari_menunggu
+FROM
+    harga_barang h
+    JOIN barang b ON h.id_barang = b.id_barang
+    JOIN toko t ON h.id_toko = t.id_toko
+    JOIN pegawai p ON h.diinput_oleh = p.id_pegawai
+WHERE
+    h.status = 'pending'
 ORDER BY h.tgl_berlaku ASC;
 
 -- Preview hasil
@@ -215,18 +319,27 @@ SELECT
     d.tgl_kirim,
     d.tgl_terima,
     d.status_dist,
-    pe.nama                                                                    AS diterima_oleh,
-    COUNT(dd.id_detail)                                                        AS jumlah_jenis_barang,
-    SUM(dd.jumlah_kirim)                                                       AS total_unit_kirim,
-    SUM(dd.jumlah_terima)                                                      AS total_unit_diterima,
-    ROUND(SUM(dd.jumlah_terima) / SUM(dd.jumlah_kirim) * 100, 1)              AS persen_diterima,
-    DATEDIFF(CURDATE(), d.tgl_kirim)                                           AS hari_sejak_kirim
-FROM distribusi_barang d
-JOIN toko t               ON d.id_toko       = t.id_toko
-LEFT JOIN pegawai pe      ON d.diterima_oleh  = pe.id_pegawai
-JOIN detail_distribusi dd ON d.id_distribusi  = dd.id_distribusi
-GROUP BY d.id_distribusi, t.nama_toko, d.tgl_kirim, d.tgl_terima,
-         d.status_dist, pe.nama
+    pe.nama AS diterima_oleh,
+    COUNT(dd.id_detail) AS jumlah_jenis_barang,
+    SUM(dd.jumlah_kirim) AS total_unit_kirim,
+    SUM(dd.jumlah_terima) AS total_unit_diterima,
+    ROUND(
+        SUM(dd.jumlah_terima) / SUM(dd.jumlah_kirim) * 100,
+        1
+    ) AS persen_diterima,
+    DATEDIFF(CURDATE(), d.tgl_kirim) AS hari_sejak_kirim
+FROM
+    distribusi_barang d
+    JOIN toko t ON d.id_toko = t.id_toko
+    LEFT JOIN pegawai pe ON d.diterima_oleh = pe.id_pegawai
+    JOIN detail_distribusi dd ON d.id_distribusi = dd.id_distribusi
+GROUP BY
+    d.id_distribusi,
+    t.nama_toko,
+    d.tgl_kirim,
+    d.tgl_terima,
+    d.status_dist,
+    pe.nama
 ORDER BY d.tgl_kirim DESC;
 
 -- Preview hasil
@@ -245,28 +358,27 @@ DROP TEMPORARY TABLE IF EXISTS tmp_hutang_jatuh_tempo;
 CREATE TEMPORARY TABLE tmp_hutang_jatuh_tempo AS
 SELECT
     h.id_hutang,
-    s.nama                                                                     AS nama_supplier,
+    s.nama AS nama_supplier,
     s.kontak_pic,
-    s.no_hp                                                                    AS hp_supplier,
+    s.no_hp AS hp_supplier,
     t.nama_toko,
     h.jumlah,
     h.tgl_hutang,
     h.tgl_jatuh_tempo,
-    DATEDIFF(h.tgl_jatuh_tempo, CURDATE())                                     AS sisa_hari,
+    DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) AS sisa_hari,
     h.status_hutang,
     h.keterangan,
     CASE
-        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) < 0    THEN 'LEWAT JATUH TEMPO'
-        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) <= 3   THEN 'SANGAT MENDESAK'
-        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) <= 7   THEN 'MENDESAK'
+        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) < 0 THEN 'LEWAT JATUH TEMPO'
+        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) <= 3 THEN 'SANGAT MENDESAK'
+        WHEN DATEDIFF(h.tgl_jatuh_tempo, CURDATE()) <= 7 THEN 'MENDESAK'
         ELSE 'NORMAL'
-    END                                                                        AS prioritas
-FROM hutang_supplier h
-JOIN supplier s ON h.id_supplier = s.id_supplier
-JOIN toko t     ON h.id_toko     = t.id_toko
-WHERE h.status_hutang != 'lunas'
-  AND h.tgl_jatuh_tempo <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+    END AS prioritas
+FROM
+    hutang_supplier h
+    JOIN supplier s ON h.id_supplier = s.id_supplier
+    JOIN toko t ON h.id_toko = t.id_toko
+WHERE
+    h.status_hutang != 'lunas'
+    AND h.tgl_jatuh_tempo <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
 ORDER BY sisa_hari ASC;
-
--- Preview hasil
-SELECT * FROM tmp_hutang_jatuh_tempo;
