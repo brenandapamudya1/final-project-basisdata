@@ -44,3 +44,40 @@ Project ini mensimulasikan sistem terintegrasi yang terdiri dari 3 buah database
 1. **Pemusatan Master Data:** Seluruh pengelolaan profil *supplier*, kategori barang, hingga otorisasi/persetujuan harga berpusat di database `GUDANG`.
 2. **Kemandirian Transaksi:** Masing-masing toko (Express & Reguler) mencatat transaksi kasir secara mandiri dan memperbarui stok fisiknya sendiri menggunakan *Triggers*.
 3. **Sinkronisasi Otomatis:** Meskipun transaksi mandiri, setiap perubahan jumlah stok di masing-masing toko akan langsung tersinkronisasi ke tabel `rekap_stok_toko` di database `GUDANG` melalui *Trigger*. Hal ini memudahkan tim Gudang Pusat memantau inventaris secara global.
+
+---
+
+## 🗂️ Domain & Struktur Tabel
+
+Database ini dibagi menjadi **6 Domain** fungsional. Setiap domain merupakan kelompok tabel yang bekerja bersama untuk satu fungsi bisnis.
+
+| # | Domain | Database | Tabel yang Tercakup |
+|---|--------|----------|---------------------|
+| 1 | **Organisasi & Lokasi** | GUDANG | `tipe_toko`, `toko` |
+| 2 | **Kepegawaian (HR)** | GUDANG, EXPRESS, toko_reguler | `divisi`, `pegawai`, `pegawai_divisi`, `absensi` |
+| 3 | **Master Barang & Harga** | GUDANG, EXPRESS, toko_reguler | `kategori_barang`, `barang`, `harga_barang`, `display_barang` |
+| 4 | **Pemasok & Pembelian** | GUDANG, EXPRESS, toko_reguler | `supplier`, `jadwal_restock`, `hutang_supplier` |
+| 5 | **Inventori & Distribusi** | GUDANG, EXPRESS, toko_reguler | `stok_dc`, `stok_toko`, `rekap_stok_toko`, `distribusi_barang`, `detail_distribusi` |
+| 6 | **Penjualan & Pelanggan (POS)** | EXPRESS, toko_reguler | `customer`, `promo`, `metode_pembayaran`, `transaksi_penjualan`, `detail_transaksi`, `pembayaran` |
+
+---
+
+## 🔗 Relasi Lintas Domain (Cross-Domain)
+
+Tabel-tabel berikut menjadi **jembatan antar domain** dan merupakan kunci integrasi seluruh sistem.
+
+| Dari | Ke | Kolom Penghubung | Keterangan |
+|------|----|------------------|------------|
+| D4 `supplier` | D3 `barang` | `barang.id_supplier` | Setiap barang dipasok oleh satu supplier |
+| D3 `barang` | D4 `jadwal_restock` | `jadwal_restock.id_barang` | Barang yang dijadwalkan restock dari supplier |
+| D3 `barang` | D5 `stok_dc` / `stok_toko` | `id_barang` | Barang dilacak stoknya di DC dan tiap toko |
+| D5 `distribusi_barang` | D5 `detail_distribusi` | `detail_distribusi.id_distribusi` | Rincian barang yang dikirim dari DC ke toko |
+| D3 `barang` | D6 `detail_transaksi` | `detail_transaksi.id_barang` | Barang yang terjual di kasir toko |
+| D3 `harga_barang` | D1 `toko` | `harga_barang.id_toko` | Harga barang bisa berbeda tiap toko |
+| D2 `pegawai` | D6 `transaksi_penjualan` | `transaksi_penjualan.id_pegawai` | Pegawai (kasir) yang melayani transaksi |
+| D2 `pegawai` | D3 `harga_barang` | `diinput_oleh`, `disetujui_oleh` | Pegawai DC yang input & approval harga |
+| D1 `toko` | D2 `pegawai` | `pegawai.id_toko` | Pegawai bertugas di toko tertentu |
+| D3 `barang` | D6 `promo` | `promo.id_barang` | Promo diskon diterapkan per barang |
+
+> 📊 **Ingin melihat ERD lengkap dengan diagram Mermaid per domain?**
+> Lihat file [`ERD_Database.md`](./ERD_Database.md) — tersedia ERD per domain dan ERD Enterprise gabungan seluruh sistem.
