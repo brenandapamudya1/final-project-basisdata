@@ -1,10 +1,10 @@
-# 📊 Retail Dashboard App (R Shiny)
+# dRetail Dashboard App (R Shiny)
 
 Aplikasi Dashboard interaktif berbasis R Shiny untuk Sistem Manajemen Ritel Multi-Database. Aplikasi ini memiliki arsitektur dinamis yang menampilkan antarmuka berbeda berdasarkan 3 role pengguna (Admin Gudang, Admin Express, dan Admin Reguler) dan mengambil data dari 3 database MySQL yang saling terhubung.
 
 ---
 
-## 🚀 Prosedur Memulai Aplikasi (Live Server Lokal)
+## Prosedur Memulai Aplikasi (Live Server Lokal)
 
 Aplikasi dan database telah dibungkus menggunakan **Docker** sehingga dapat dijalankan dengan mudah dalam satu perintah tanpa perlu konfigurasi server R dan MySQL secara manual.
 
@@ -35,7 +35,7 @@ Aplikasi dan database telah dibungkus menggunakan **Docker** sehingga dapat dija
 
 ---
 
-## 🧠 Overview Algorithm & Code Workflow
+## Overview Algorithm & Code Workflow
 
 Aplikasi ini menggunakan arsitektur modular yang memisahkan logika UI (tampilan), Server (pemrosesan), dan Data (query database). Alur kerja (_workflow_) algoritma utamanya adalah sebagai berikut:
 
