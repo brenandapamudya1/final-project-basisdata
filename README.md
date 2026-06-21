@@ -2,6 +2,8 @@
 
 Dokumen ini berisi panduan step-by-step untuk menjalankan (mengeksekusi) file SQL pada project ini secara runtut, beserta penjelasan dari masing-masing file.
 
+Syntax SQL pada directory ./SQLSyntax
+
 Project ini mensimulasikan sistem terintegrasi yang terdiri dari 3 buah database utama yang saling berkaitan:
 1. `GUDANG` (Database Master & Pusat)
 2. `EXPRESS` (Database Toko Express)
@@ -40,14 +42,14 @@ Project ini mensimulasikan sistem terintegrasi yang terdiri dari 3 buah database
 
 ---
 
-## 💡 Ringkasan Alur Sistem Terintegrasi
+## Ringkasan Alur Sistem Terintegrasi
 1. **Pemusatan Master Data:** Seluruh pengelolaan profil *supplier*, kategori barang, hingga otorisasi/persetujuan harga berpusat di database `GUDANG`.
 2. **Kemandirian Transaksi:** Masing-masing toko (Express & Reguler) mencatat transaksi kasir secara mandiri dan memperbarui stok fisiknya sendiri menggunakan *Triggers*.
 3. **Sinkronisasi Otomatis:** Meskipun transaksi mandiri, setiap perubahan jumlah stok di masing-masing toko akan langsung tersinkronisasi ke tabel `rekap_stok_toko` di database `GUDANG` melalui *Trigger*. Hal ini memudahkan tim Gudang Pusat memantau inventaris secara global.
 
 ---
 
-## 🗂️ Domain & Struktur Tabel
+## Domain & Struktur Tabel
 
 Database ini dibagi menjadi **6 Domain** fungsional. Setiap domain merupakan kelompok tabel yang bekerja bersama untuk satu fungsi bisnis.
 
@@ -79,5 +81,5 @@ Tabel-tabel berikut menjadi **jembatan antar domain** dan merupakan kunci integr
 | D1 `toko` | D2 `pegawai` | `pegawai.id_toko` | Pegawai bertugas di toko tertentu |
 | D3 `barang` | D6 `promo` | `promo.id_barang` | Promo diskon diterapkan per barang |
 
-> 📊 **Ingin melihat ERD lengkap dengan diagram Mermaid per domain?**
+> **Ingin melihat ERD lengkap dengan diagram Mermaid per domain?**
 > Lihat file [`ERD_Database.md`](./ERD_Database.md) — tersedia ERD per domain dan ERD Enterprise gabungan seluruh sistem.
