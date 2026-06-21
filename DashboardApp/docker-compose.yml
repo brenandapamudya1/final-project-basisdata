@@ -12,10 +12,10 @@ services:
       MYSQL_DATABASE: GUDANG
     volumes:
       # Mount SQL files dengan prefix urutan eksekusi
-      - ../Gudang.sql:/docker-entrypoint-initdb.d/01_Gudang.sql:ro
-      - ../TokoExpress.sql:/docker-entrypoint-initdb.d/02_TokoExpress.sql:ro
-      - ../TokoReguler.sql:/docker-entrypoint-initdb.d/03_TokoReguler.sql:ro
-      - ../Triggers.sql:/docker-entrypoint-initdb.d/04_Triggers.sql:ro
+      - ../SQLSyntax/Gudang.sql:/docker-entrypoint-initdb.d/01_Gudang.sql:ro
+      - ../SQLSyntax/TokoExpress.sql:/docker-entrypoint-initdb.d/02_TokoExpress.sql:ro
+      - ../SQLSyntax/TokoReguler.sql:/docker-entrypoint-initdb.d/03_TokoReguler.sql:ro
+      - ../SQLSyntax/Triggers.sql:/docker-entrypoint-initdb.d/04_Triggers.sql:ro
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
