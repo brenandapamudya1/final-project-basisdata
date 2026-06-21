@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  # 1: MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: retail_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: retail2024
+      MYSQL_DATABASE: GUDANG
+    volumes:
+      # Mount SQL files dengan prefix urutan eksekusi
+      - ../Gudang.sql:/docker-entrypoint-initdb.d/01_Gudang.sql:ro
+      - ../TokoExpress.sql:/docker-entrypoint-initdb.d/02_TokoExpress.sql:ro
+      - ../TokoReguler.sql:/docker-entrypoint-initdb.d/03_TokoReguler.sql:ro
+      - ../Triggers.sql:/docker-entrypoint-initdb.d/04_Triggers.sql:ro
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pretail2024" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # 2: R Shiny App
+  shiny:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: retail_dashboard
+    restart: unless-stopped
+    ports:
+      - "3838:3838"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_PASSWORD: retail2024
+
+volumes:
+  db_data:
