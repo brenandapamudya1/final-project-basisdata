@@ -1,10 +1,8 @@
-# ============================================================
-#  gudang_ui.R — Layout Tab Admin Gudang (Premium)
-# ============================================================
+# Layout Tab Admin Gudang (Premium)
 
 gudang_ui_tabs <- function() {
   bs4TabItems(
-    # ── Tab: Dashboard Overview ────────────────────────────
+    # Tab: Dashboard Overview
     bs4TabItem(tabName = "g_home",
 
       # Welcome Banner
@@ -106,7 +104,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Stok DC ──────────────────────────────────────
+    # Tab: Stok DC
     bs4TabItem(tabName = "g_stok",
       fluidRow(
         column(8, h4(class = "section-title", icon("boxes"), " Stok Gudang Pusat (DC)")),
@@ -120,7 +118,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Rekap Stok Toko ──────────────────────────────
+    # Tab: Rekap Stok Toko
     bs4TabItem(tabName = "g_rekap",
       h4(class = "section-title", icon("store"), " Rekap Stok Semua Toko"),
       bs4Card(title = tagList(icon("sync-alt"), " Rekap Stok Toko (Real-time Sync)"),
@@ -129,7 +127,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Distribusi ───────────────────────────────────
+    # Tab: Distribusi
     bs4TabItem(tabName = "g_distribusi",
       h4(class = "section-title", icon("truck"), " Distribusi Barang DC → Toko"),
       fluidRow(
@@ -143,7 +141,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Harga & Approval ─────────────────────────────
+    # Tab: Harga & Approval
     bs4TabItem(tabName = "g_harga",
       h4(class = "section-title", icon("tags"), " Manajemen Harga & Approval"),
       bs4Card(title = tagList(icon("clock"), " Harga Menunggu Approval"), width = 12,
@@ -165,7 +163,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Hutang Supplier ──────────────────────────────
+    # Tab: Hutang Supplier
     bs4TabItem(tabName = "g_hutang",
       h4(class = "section-title", icon("file-invoice-dollar"), " Hutang Supplier Konsolidasi"),
       bs4Card(title = tagList(icon("list"), " Semua Hutang Supplier"), width = 12, status = "primary",
@@ -173,7 +171,7 @@ gudang_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Absensi ──────────────────────────────────────
+    # Tab: Absensi
     bs4TabItem(tabName = "g_absensi",
       fluidRow(
         column(8, h4(class = "section-title", icon("user-clock"), " Absensi Staff DC")),

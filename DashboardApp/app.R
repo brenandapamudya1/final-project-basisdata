@@ -1,7 +1,4 @@
-# ============================================================
-#  app.R — Entry Point Aplikasi R Shiny
-#  Arsitektur: Single bs4DashPage + dynamic sidebar/body
-# ============================================================
+# Entry Point Aplikasi R Shiny
 
 library(shiny)
 library(bs4Dash)
@@ -9,7 +6,7 @@ library(plotly)
 library(DT)
 library(shinyjs)
 
-# ── 1. Source Semua File ──────────────────────────────────────
+# 1. Source Semua File
 source("R/config.R",  local = TRUE)
 source("R/helpers.R", local = TRUE)
 source("R/auth.R",    local = TRUE)
@@ -27,8 +24,7 @@ source("server/gudang_server.R",  local = TRUE)
 source("server/express_server.R", local = TRUE)
 source("server/reguler_server.R", local = TRUE)
 
-
-# ── 2. Define UI Master ───────────────────────────────────────
+# 2. Define UI Master
 ui <- bs4DashPage(
   dark  = NULL,
   help  = NULL,
@@ -58,20 +54,19 @@ ui <- bs4DashPage(
   )
 )
 
-
-# ── 3. Define Server Master ───────────────────────────────────
+# 3. Define Server Master
 server <- function(input, output, session) {
 
   USER_ROLE    <- reactiveVal("login")
   server_init  <- reactiveValues(gudang = FALSE, express = FALSE, reguler = FALSE)
 
-  # ── Inject data-role ke <body> untuk CSS theming ───────────
+  # Inject data-role ke <body> untuk CSS theming
   observe({
     role <- USER_ROLE()
     runjs(sprintf("document.body.setAttribute('data-role', '%s');", role))
   })
 
-  # ── Navbar Brand (logo + title berubah per role) ───────────
+  # Navbar Brand (logo + title berubah per role)
   output$nav_brand <- renderUI({
     role <- USER_ROLE()
     if (role == "login") return(tags$span(class = "brand-text font-weight-bold", icon("store"), " Retail Dashboard"))
@@ -80,7 +75,7 @@ server <- function(input, output, session) {
     if (role == "reguler") return(tags$span(class = "brand-text font-weight-bold", icon("shopping-basket"), " Admin Reguler"))
   })
 
-  # ── Tombol Logout di navbar kanan ──────────────────────────
+  # Tombol Logout di navbar kanan
   output$nav_right <- renderUI({
     if (USER_ROLE() != "login") {
       tags$li(class = "nav-item",
@@ -91,7 +86,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ── Sidebar Menu (berubah per role) ────────────────────────
+  # Sidebar Menu (berubah per role)
   output$sidebar_menu <- renderUI({
     role <- USER_ROLE()
     if (role == "login") return(NULL)
@@ -131,7 +126,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ── Render Body Content ────────────────────────────────────
+  # Render Body Content
   output$page_content <- renderUI({
     role <- USER_ROLE()
     if (role == "login") {
@@ -145,7 +140,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ── Inisialisasi server modules (hanya sekali per role) ────
+  # Inisialisasi server modules (hanya sekali per role)
   observe({
     role <- USER_ROLE()
     if (role == "gudang"  && !server_init$gudang)  { gudang_server(input, output, session);  server_init$gudang  <- TRUE }
@@ -153,7 +148,7 @@ server <- function(input, output, session) {
     if (role == "reguler" && !server_init$reguler)  { reguler_server(input, output, session); server_init$reguler <- TRUE }
   })
 
-  # ── Fix navigasi: klik tab pertama setelah sidebar ter-render ─
+  # Fix navigasi: klik tab pertama setelah sidebar ter-render
   observe({
     role <- USER_ROLE()
     if (role != "login") {
@@ -169,7 +164,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ── Handle tombol Login ────────────────────────────────────
+  # Handle tombol Login
   observeEvent(input$btn_login, {
     req(input$username, input$password)
     role <- check_login(input$username, input$password)
@@ -186,7 +181,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ── Handle tombol Logout ───────────────────────────────────
+  # Handle tombol Logout
   observeEvent(input$btn_logout, {
     USER_ROLE("login")
     # Reset server init agar bisa re-initialize jika login ulang
@@ -197,7 +192,7 @@ server <- function(input, output, session) {
     runjs("document.body.classList.add('sidebar-collapse');")
   })
 
-  # ── Hide sidebar saat di login page ────────────────────────
+  # Hide sidebar saat di login page
   observe({
     if (USER_ROLE() == "login") {
       runjs("document.body.classList.add('sidebar-collapse');")

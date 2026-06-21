@@ -1,6 +1,4 @@
-# ============================================================
-#  login_ui.R — Halaman Login Premium
-# ============================================================
+# Halaman Login Premium
 
 login_ui <- function() {
   tagList(

@@ -1,6 +1,4 @@
-# ============================================================
-#  auth.R — Sistem Login Sederhana (Hardcoded 3 Akun)
-# ============================================================
+# sistem login hardcoded 3 akun
 
 USERS <- list(
   admin_gudang = list(
@@ -23,7 +21,7 @@ USERS <- list(
   )
 )
 
-# Mengembalikan role string jika login valid, NULL jika gagal
+# returns role string if valid, NULL if not
 check_login <- function(username, password) {
   user <- USERS[[username]]
   if (!is.null(user) && user$password == password) {
@@ -32,7 +30,7 @@ check_login <- function(username, password) {
   return(NULL)
 }
 
-# Ambil info user berdasarkan role
+# returns user info by role
 get_user_info <- function(role) {
   for (u in USERS) {
     if (u$role == role) return(u)

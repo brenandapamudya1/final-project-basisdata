@@ -1,6 +1,4 @@
-# ============================================================
-#  reguler_server.R — Server Logic untuk Admin Reguler (Premium)
-# ============================================================
+# Server Logic untuk Admin Reguler (Premium)
 
 reguler_server <- function(input, output, session) {
 
@@ -120,7 +118,7 @@ reguler_server <- function(input, output, session) {
     datatable(d, escape=FALSE, rownames=FALSE, options=list(pageLength=10,scrollX=TRUE))
   })
 
-  # ── MODAL: Registrasi Customer ──────────────────────────────
+  # MODAL: Registrasi Customer
   observeEvent(input$btn_add_cust_r, {
     showModal(modalDialog(
       title = tagList(icon("user-plus"), " Registrasi Customer Loyalty"),
@@ -147,7 +145,7 @@ reguler_server <- function(input, output, session) {
     })
   })
 
-  # ── MODAL: Input Absensi ────────────────────────────────────
+  # MODAL: Input Absensi
   observeEvent(input$btn_add_absensi_r, {
     peg_choices <- q_reguler_get_pegawai()
     peg_list <- setNames(peg_choices$id_pegawai, peg_choices$nama)
@@ -185,7 +183,7 @@ reguler_server <- function(input, output, session) {
     })
   })
 
-  # ── MODAL: Transaksi POS ─────────────────────────────────────
+  # MODAL: Transaksi POS
   observeEvent(input$btn_add_pos_r, {
     cust_choices <- q_reguler_get_customer()
     cust_list <- c("Walk-in (Tanpa Member)" = "")

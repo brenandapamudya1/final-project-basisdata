@@ -1,8 +1,6 @@
-# ============================================================
-#  queries_gudang.R — Semua Query SQL untuk Database GUDANG
-# ============================================================
+# Semua Query SQL untuk Database GUDANG
 
-# ── Ringkasan Stok DC ────────────────────────────────────────
+# Ringkasan Stok DC
 q_gudang_stok_summary <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -13,7 +11,7 @@ q_gudang_stok_summary <- function() {
   ")
 }
 
-# ── Barang kritis di DC ──────────────────────────────────────
+# Barang kritis di DC
 q_gudang_stok_kritis <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -31,7 +29,7 @@ q_gudang_stok_kritis <- function() {
   ")
 }
 
-# ── Top 5 barang stok terendah di DC ─────────────────────────
+# Top 5 barang stok terendah di DC
 q_gudang_top5_stok_rendah <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -45,7 +43,7 @@ q_gudang_top5_stok_rendah <- function() {
   ")
 }
 
-# ── Rekap stok semua toko ────────────────────────────────────
+# Rekap stok semua toko
 q_gudang_rekap_stok_toko <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -65,7 +63,7 @@ q_gudang_rekap_stok_toko <- function() {
   ")
 }
 
-# ── Data untuk bar chart stok per toko ──────────────────────
+# Data untuk bar chart stok per toko
 q_gudang_stok_chart <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -77,14 +75,14 @@ q_gudang_stok_chart <- function() {
   ")
 }
 
-# ── Jumlah toko aktif ────────────────────────────────────────
+# Jumlah toko aktif
 q_gudang_toko_count <- function() {
   query_db(get_con_gudang, "
     SELECT COUNT(*) AS total FROM toko WHERE status = 'aktif'
   ")
 }
 
-# ── Distribusi terbaru (15 data) ─────────────────────────────
+# Distribusi terbaru (15 data)
 q_gudang_distribusi <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -105,7 +103,7 @@ q_gudang_distribusi <- function() {
   ")
 }
 
-# ── Distribusi chart: total per toko ─────────────────────────
+# Distribusi chart: total per toko
 q_gudang_distribusi_chart <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -119,7 +117,7 @@ q_gudang_distribusi_chart <- function() {
   ")
 }
 
-# ── Harga pending approval ───────────────────────────────────
+# Harga pending approval
 q_gudang_harga_pending <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -139,7 +137,7 @@ q_gudang_harga_pending <- function() {
   ")
 }
 
-# ── Semua data harga ─────────────────────────────────────────
+# Semua data harga
 q_gudang_harga_all <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -164,7 +162,7 @@ q_gudang_harga_all <- function() {
   ")
 }
 
-# ── Hutang supplier konsolidasi ──────────────────────────────
+# Hutang supplier konsolidasi
 q_gudang_hutang <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -184,7 +182,7 @@ q_gudang_hutang <- function() {
   ")
 }
 
-# ── Total hutang belum lunas ─────────────────────────────────
+# Total hutang belum lunas
 q_gudang_hutang_summary <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -195,7 +193,7 @@ q_gudang_hutang_summary <- function() {
   ")
 }
 
-# ── Absensi staff DC ─────────────────────────────────────────
+# Absensi staff DC
 q_gudang_absensi <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -215,7 +213,7 @@ q_gudang_absensi <- function() {
   ")
 }
 
-# ── Summary absensi ──────────────────────────────────────────
+# Summary absensi
 q_gudang_absensi_summary <- function() {
   query_db(get_con_gudang, "
     SELECT
@@ -228,7 +226,7 @@ q_gudang_absensi_summary <- function() {
   ")
 }
 
-# ── Approve / Reject harga ───────────────────────────────────
+# Approve / Reject harga
 q_gudang_approve_harga <- function(id_harga, new_status) {
   sql <- sprintf("
     UPDATE harga_barang
@@ -238,7 +236,7 @@ q_gudang_approve_harga <- function(id_harga, new_status) {
   execute_db(get_con_gudang, sql)
 }
 
-# ── DROP DOWN DATA ───────────────────────────────────────────
+# DROP DOWN DATA
 q_gudang_get_kategori <- function() {
   query_db(get_con_gudang, "SELECT id_kategori, nama_kategori FROM kategori_barang ORDER BY nama_kategori")
 }
@@ -247,7 +245,7 @@ q_gudang_get_supplier <- function() {
   query_db(get_con_gudang, "SELECT id_supplier, nama FROM supplier ORDER BY nama")
 }
 
-# ── INSERT Barang Baru ───────────────────────────────────────
+# INSERT Barang Baru
 q_gudang_insert_barang <- function(id_barang, nama_barang, id_kategori, id_supplier, satuan, berat_gram, tipe_toko) {
   nama_barang <- gsub("'", "''", nama_barang)
   id_barang   <- gsub("'", "''", id_barang)
@@ -260,7 +258,7 @@ q_gudang_insert_barang <- function(id_barang, nama_barang, id_kategori, id_suppl
   execute_db(get_con_gudang, sql)
 }
 
-# ── Absensi ──────────────────────────────────────────────────
+# Absensi
 q_gudang_get_pegawai <- function() {
   query_db(get_con_gudang, "SELECT id_pegawai, nama FROM pegawai ORDER BY nama")
 }

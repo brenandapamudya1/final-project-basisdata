@@ -1,10 +1,8 @@
-# ============================================================
-#  express_ui.R — Layout Tab Admin Express (Premium)
-# ============================================================
+# Layout Tab Admin Express (Premium)
 
 express_ui_tabs <- function() {
   bs4TabItems(
-    # ── Tab: Dashboard Overview ────────────────────────────
+    # Tab: Dashboard Overview
     bs4TabItem(tabName = "e_home",
 
       # Welcome Banner
@@ -84,7 +82,7 @@ express_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Transaksi ────────────────────────────────────
+    # Tab: Transaksi
     bs4TabItem(tabName = "e_trx",
       fluidRow(
         column(8, h4(class = "section-title", icon("shopping-cart"), " Transaksi Penjualan")),
@@ -97,7 +95,7 @@ express_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Stok & Restock ───────────────────────────────
+    # Tab: Stok & Restock
     bs4TabItem(tabName = "e_stok",
       h4(class = "section-title", icon("boxes"), " Stok & Jadwal Restock"),
       bs4Card(title = tagList(icon("exclamation-triangle"), " Barang Kritis"), width = 12,
@@ -114,7 +112,7 @@ express_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Promo ────────────────────────────────────────
+    # Tab: Promo
     bs4TabItem(tabName = "e_promo",
       fluidRow(
         column(8, h4(class = "section-title", icon("percent"), " Promo Toko Express")),
@@ -127,7 +125,7 @@ express_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Hutang ───────────────────────────────────────
+    # Tab: Hutang
     bs4TabItem(tabName = "e_hutang",
       h4(class = "section-title", icon("file-invoice-dollar"), " Hutang Supplier"),
       bs4Card(title = tagList(icon("list"), " Status Hutang Supplier"), width = 12, status = "warning",
@@ -135,7 +133,7 @@ express_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Absensi ──────────────────────────────────────
+    # Tab: Absensi
     bs4TabItem(tabName = "e_absensi",
       fluidRow(
         column(8, h4(class = "section-title", icon("user-clock"), " Absensi Pegawai Express")),

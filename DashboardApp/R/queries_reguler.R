@@ -1,6 +1,4 @@
-# ============================================================
-#  queries_reguler.R — Query SQL untuk Database toko_reguler
-# ============================================================
+# Query SQL untuk Database toko_reguler
 
 q_reguler_penjualan_summary <- function() {
   query_db(get_con_reguler, "
@@ -28,7 +26,7 @@ q_reguler_penjualan_chart <- function() {
   ")
 }
 
-# ── Top 5 produk terlaris ────────────────────────────────────
+# Top 5 produk terlaris
 q_reguler_top5_produk <- function() {
   query_db(get_con_reguler, "
     SELECT
@@ -185,7 +183,7 @@ q_reguler_absensi_summary <- function() {
   ")
 }
 
-# ── INSERT Registrasi Customer ────────────────────────────────
+# INSERT Registrasi Customer
 q_reguler_insert_customer <- function(id_cust, nama, no_hp, email) {
   # Sanitasi sederhana: escape quotes
   nama  <- gsub("'", "''", nama)
@@ -201,7 +199,7 @@ q_reguler_insert_customer <- function(id_cust, nama, no_hp, email) {
   execute_db(get_con_reguler, sql)
 }
 
-# ── Absensi ──────────────────────────────────────────────────
+# Absensi
 q_reguler_get_pegawai <- function() {
   query_db(get_con_reguler, "SELECT id_pegawai, nama FROM pegawai ORDER BY nama")
 }
@@ -219,7 +217,7 @@ q_reguler_insert_absensi <- function(id_pegawai, tgl, jam_masuk, jam_keluar, sta
   execute_db(get_con_reguler, sql)
 }
 
-# ── Transaksi POS Sederhana ───────────────────────────────────
+# Transaksi POS Sederhana
 q_reguler_get_customer <- function() {
   query_db(get_con_reguler, "SELECT id_customer, nama FROM customer ORDER BY nama")
 }

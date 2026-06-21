@@ -1,23 +1,21 @@
-# ============================================================
-#  gudang_server.R — Server Logic untuk Admin Gudang (Premium)
-# ============================================================
+# Server Logic untuk Admin Gudang (Premium)
 
 gudang_server <- function(input, output, session) {
 
   rv_gudang_barang <- reactiveVal(0)
   rv_absensi <- reactiveVal(0)
 
-  # ── Reactive Data ─────────────────────────────────────────
+  # Reactive Data
   stok_sum   <- reactive({ q_gudang_stok_summary() })
   hutang_sum <- reactive({ q_gudang_hutang_summary() })
 
-  # ── Clock display ─────────────────────────────────────────
+  # Clock display
   output$g_clock_display <- renderUI({
     invalidateLater(60000, session)
     span(format(Sys.time(), "%H:%M WIB"))
   })
 
-  # ── Value Boxes ───────────────────────────────────────────
+  # Value Boxes
   output$g_total_jenis <- renderUI({
     d <- stok_sum()
     if (nrow(d) == 0) return(span("0"))
@@ -39,7 +37,7 @@ gudang_server <- function(input, output, session) {
     span(d$jml_belum_lunas)
   })
 
-  # ── Quick Action Values ───────────────────────────────────
+  # Quick Action Values
   output$g_qa_kritis <- renderUI({
     d <- stok_sum()
     if (nrow(d) == 0) return(span("0"))
@@ -75,13 +73,13 @@ gudang_server <- function(input, output, session) {
     span(fmt_rupiah(d$total_belum_lunas))
   })
 
-  # ── Legacy outputs for value box row ──────────────────────
+  # Legacy outputs for value box row
   output$g_harga_pending <- renderUI({ d <- q_gudang_harga_pending(); span(nrow(d)) })
   output$g_hadir_dc      <- renderUI({ d <- q_gudang_absensi_summary(); if(nrow(d)==0) return(span("0")); span(d$hadir) })
   output$g_jatuh_tempo   <- renderUI({ d <- hutang_sum(); if(nrow(d)==0) return(span("0")); span(d$jatuh_tempo_soon) })
   output$g_total_hutang   <- renderUI({ d <- hutang_sum(); if(nrow(d)==0) return(span("Rp 0")); span(fmt_rupiah(d$total_belum_lunas)) })
 
-  # ── Chart: Stok per Toko (light mode) ────────────────────
+  # Chart: Stok per Toko (light mode)
   output$g_chart_stok_toko <- renderPlotly({
     d <- q_gudang_stok_chart()
     if (nrow(d) == 0) return(plotly_empty())
@@ -100,7 +98,7 @@ gudang_server <- function(input, output, session) {
       ) %>% config(displayModeBar = FALSE)
   })
 
-  # ── Chart: Absensi pie (light mode) ──────────────────────
+  # Chart: Absensi pie (light mode)
   output$g_chart_absensi <- renderPlotly({
     rv_absensi()
     d <- q_gudang_absensi_summary()
@@ -120,7 +118,7 @@ gudang_server <- function(input, output, session) {
              margin = list(t = 10, b = 10)) %>% config(displayModeBar = FALSE)
   })
 
-  # ── Chart: Top 5 stok terendah (horizontal bar) ─────────
+  # Chart: Top 5 stok terendah (horizontal bar)
   output$g_chart_top5_stok <- renderPlotly({
     rv_gudang_barang()
     d <- q_gudang_top5_stok_rendah()
@@ -142,7 +140,7 @@ gudang_server <- function(input, output, session) {
       ) %>% config(displayModeBar = FALSE)
   })
 
-  # ── Chart: Distribusi per toko ───────────────────────────
+  # Chart: Distribusi per toko
   output$g_chart_distribusi <- renderPlotly({
     d <- q_gudang_distribusi_chart()
     if (nrow(d) == 0) return(plotly_empty())
@@ -160,7 +158,7 @@ gudang_server <- function(input, output, session) {
       ) %>% config(displayModeBar = FALSE)
   })
 
-  # ── Tabel: Stok Kritis DC ─────────────────────────────────
+  # Tabel: Stok Kritis DC
   output$g_tbl_stok_kritis <- renderDT({
     rv_gudang_barang()
     d <- q_gudang_stok_kritis()
@@ -171,7 +169,7 @@ gudang_server <- function(input, output, session) {
               colnames = c("ID Barang","Nama Barang","Kategori","Stok","Minimal","Kekurangan","Status"))
   })
 
-  # ── Tabel: Rekap Stok Toko ───────────────────────────────
+  # Tabel: Rekap Stok Toko
   output$g_tbl_rekap_stok <- renderDT({
     d <- q_gudang_rekap_stok_toko()
     if (nrow(d) == 0) return(datatable(data.frame(Pesan = "Data tidak tersedia")))
@@ -180,7 +178,7 @@ gudang_server <- function(input, output, session) {
               filter = "top")
   })
 
-  # ── Tabel: Distribusi ─────────────────────────────────────
+  # Tabel: Distribusi
   output$g_tbl_distribusi <- renderDT({
     d <- q_gudang_distribusi()
     if (nrow(d) == 0) return(datatable(data.frame(Pesan = "Data tidak tersedia")))
@@ -188,7 +186,7 @@ gudang_server <- function(input, output, session) {
               options = list(pageLength = 10, scrollX = TRUE))
   })
 
-  # ── Tabel: Harga Pending ──────────────────────────────────
+  # Tabel: Harga Pending
   output$g_tbl_harga_pending <- renderDT({
     d <- q_gudang_harga_pending()
     if (nrow(d) == 0) return(datatable(data.frame(Pesan = "Tidak ada harga pending")))
@@ -199,7 +197,7 @@ gudang_server <- function(input, output, session) {
               selection = "single")
   })
 
-  # ── Update selectInput approval dari tabel pending ────────
+  # Update selectInput approval dari tabel pending
   observe({
     d <- q_gudang_harga_pending()
     if (nrow(d) > 0) {
@@ -208,7 +206,7 @@ gudang_server <- function(input, output, session) {
     }
   })
 
-  # ── Aksi Approve/Reject ───────────────────────────────────
+  # Aksi Approve/Reject
   observeEvent(input$g_btn_approve, {
     req(input$g_sel_harga_id, input$g_sel_action)
     result <- q_gudang_approve_harga(input$g_sel_harga_id, input$g_sel_action)
@@ -224,7 +222,7 @@ gudang_server <- function(input, output, session) {
     }
   })
 
-  # ── Tabel: Semua Harga ────────────────────────────────────
+  # Tabel: Semua Harga
   output$g_tbl_harga_all <- renderDT({
     d <- q_gudang_harga_all()
     if (nrow(d) == 0) return(datatable(data.frame(Pesan = "Data tidak tersedia")))
@@ -234,7 +232,7 @@ gudang_server <- function(input, output, session) {
               filter = "top")
   })
 
-  # ── Tabel: Hutang ─────────────────────────────────────────
+  # Tabel: Hutang
   output$g_tbl_hutang <- renderDT({
     d <- q_gudang_hutang()
     if (nrow(d) == 0) return(datatable(data.frame(Pesan = "Data tidak tersedia")))
@@ -245,7 +243,7 @@ gudang_server <- function(input, output, session) {
               filter = "top")
   })
 
-  # ── Tabel: Absensi ────────────────────────────────────────
+  # Tabel: Absensi
   output$g_tbl_absensi <- renderDT({
     rv_absensi()
     d <- q_gudang_absensi()
@@ -256,7 +254,7 @@ gudang_server <- function(input, output, session) {
               filter = "top")
   })
 
-  # ── MODAL: Tambah Barang Baru ───────────────────────────────
+  # MODAL: Tambah Barang Baru
   observeEvent(input$btn_add_barang, {
     cat_choices <- q_gudang_get_kategori()
     cat_list <- setNames(cat_choices$id_kategori, cat_choices$nama_kategori)
@@ -298,7 +296,7 @@ gudang_server <- function(input, output, session) {
     })
   })
 
-  # ── MODAL: Input Absensi ────────────────────────────────────
+  # MODAL: Input Absensi
   observeEvent(input$btn_add_absensi_g, {
     peg_choices <- q_gudang_get_pegawai()
     peg_list <- setNames(peg_choices$id_pegawai, peg_choices$nama)

@@ -1,8 +1,6 @@
-# ============================================================
-#  queries_express.R — Semua Query SQL untuk Database EXPRESS
-# ============================================================
+# Semua Query SQL untuk Database EXPRESS
 
-# ── Ringkasan penjualan ────────────────────────────────────
+# Ringkasan penjualan
 q_express_penjualan_summary <- function() {
   query_db(get_con_express, "
     SELECT
@@ -16,7 +14,7 @@ q_express_penjualan_summary <- function() {
   ")
 }
 
-# ── Penjualan per toko untuk chart ───────────────────────────
+# Penjualan per toko untuk chart
 q_express_penjualan_chart <- function() {
   query_db(get_con_express, "
     SELECT
@@ -30,7 +28,7 @@ q_express_penjualan_chart <- function() {
   ")
 }
 
-# ── Top 5 produk terlaris ────────────────────────────────────
+# Top 5 produk terlaris
 q_express_top5_produk <- function() {
   query_db(get_con_express, "
     SELECT
@@ -47,7 +45,7 @@ q_express_top5_produk <- function() {
   ")
 }
 
-# ── Metode pembayaran untuk donut chart ──────────────────────
+# Metode pembayaran untuk donut chart
 q_express_metode_bayar_chart <- function() {
   query_db(get_con_express, "
     SELECT
@@ -61,7 +59,7 @@ q_express_metode_bayar_chart <- function() {
   ")
 }
 
-# ── Transaksi terbaru ────────────────────────────────────────
+# Transaksi terbaru
 q_express_transaksi_terbaru <- function() {
   query_db(get_con_express, "
     SELECT
@@ -83,7 +81,7 @@ q_express_transaksi_terbaru <- function() {
   ")
 }
 
-# ── Stok kritis ──────────────────────────────────────────────
+# Stok kritis
 q_express_stok_kritis <- function() {
   query_db(get_con_express, "
     SELECT
@@ -102,7 +100,7 @@ q_express_stok_kritis <- function() {
   ")
 }
 
-# ── Semua stok toko ──────────────────────────────────────────
+# Semua stok toko
 q_express_stok_all <- function() {
   query_db(get_con_express, "
     SELECT
@@ -120,7 +118,7 @@ q_express_stok_all <- function() {
   ")
 }
 
-# ── Promo aktif ──────────────────────────────────────────────
+# Promo aktif
 q_express_promo <- function() {
   query_db(get_con_express, "
     SELECT
@@ -139,7 +137,7 @@ q_express_promo <- function() {
   ")
 }
 
-# ── Jadwal restock ───────────────────────────────────────────
+# Jadwal restock
 q_express_restock <- function() {
   query_db(get_con_express, "
     SELECT
@@ -159,7 +157,7 @@ q_express_restock <- function() {
   ")
 }
 
-# ── Hutang supplier ──────────────────────────────────────────
+# Hutang supplier
 q_express_hutang <- function() {
   query_db(get_con_express, "
     SELECT
@@ -179,7 +177,7 @@ q_express_hutang <- function() {
   ")
 }
 
-# ── Absensi pegawai ──────────────────────────────────────────
+# Absensi pegawai
 q_express_absensi <- function() {
   query_db(get_con_express, "
     SELECT
@@ -201,7 +199,7 @@ q_express_absensi <- function() {
   ")
 }
 
-# ── Summary absensi ──────────────────────────────────────────
+# Summary absensi
 q_express_absensi_summary <- function() {
   query_db(get_con_express, "
     SELECT
@@ -214,7 +212,7 @@ q_express_absensi_summary <- function() {
   ")
 }
 
-# ── DROP DOWN DATA ───────────────────────────────────────────
+# DROP DOWN DATA
 q_express_get_barang_promo <- function() {
   query_db(get_con_express, "
     SELECT DISTINCT b.id_barang, b.nama_barang
@@ -224,7 +222,7 @@ q_express_get_barang_promo <- function() {
   ")
 }
 
-# ── INSERT Promo ─────────────────────────────────────────────
+# INSERT Promo
 q_express_insert_promo <- function(id_promo, nama_promo, id_barang, jenis_diskon, nilai_diskon, tgl_mulai, tgl_selesai, is_aktif) {
   nama_promo <- gsub("'", "''", nama_promo)
   id_promo   <- gsub("'", "''", id_promo)
@@ -238,7 +236,7 @@ q_express_insert_promo <- function(id_promo, nama_promo, id_barang, jenis_diskon
   execute_db(get_con_express, sql)
 }
 
-# ── Absensi ──────────────────────────────────────────────────
+# Absensi
 q_express_get_pegawai <- function() {
   query_db(get_con_express, "SELECT id_pegawai, nama FROM pegawai ORDER BY nama")
 }
@@ -256,7 +254,7 @@ q_express_insert_absensi <- function(id_pegawai, tgl, jam_masuk, jam_keluar, sta
   execute_db(get_con_express, sql)
 }
 
-# ── Transaksi POS Sederhana ───────────────────────────────────
+# Transaksi POS Sederhana
 q_express_get_customer <- function() {
   query_db(get_con_express, "SELECT id_customer, nama FROM customer ORDER BY nama")
 }

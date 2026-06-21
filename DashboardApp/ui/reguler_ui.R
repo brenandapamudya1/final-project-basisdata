@@ -1,10 +1,8 @@
-# ============================================================
-#  reguler_ui.R — Layout Tab Admin Reguler (Premium)
-# ============================================================
+# Layout Tab Admin Reguler (Premium)
 
 reguler_ui_tabs <- function() {
   bs4TabItems(
-    # ── Tab: Dashboard Overview ────────────────────────────
+    # Tab: Dashboard Overview
     bs4TabItem(tabName = "r_home",
 
       # Welcome Banner
@@ -84,7 +82,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Transaksi ────────────────────────────────────
+    # Tab: Transaksi
     bs4TabItem(tabName = "r_trx",
       fluidRow(
         column(8, h4(class = "section-title", icon("shopping-cart"), " Transaksi Penjualan")),
@@ -97,7 +95,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Stok per Section ─────────────────────────────
+    # Tab: Stok per Section
     bs4TabItem(tabName = "r_stok",
       h4(class = "section-title", icon("layer-group"), " Stok per Section"),
       bs4Card(title = tagList(icon("th-list"), " Ringkasan Stok per Section & Toko"), width = 12, status = "success",
@@ -109,7 +107,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Customer & Loyalty ───────────────────────────
+    # Tab: Customer & Loyalty
     bs4TabItem(tabName = "r_cust",
       fluidRow(
         column(8, h4(class = "section-title", icon("crown"), " Customer & Program Loyalty")),
@@ -122,7 +120,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Promo ────────────────────────────────────────
+    # Tab: Promo
     bs4TabItem(tabName = "r_promo",
       h4(class = "section-title", icon("percent"), " Promo Toko Reguler"),
       bs4Card(title = tagList(icon("tags"), " Daftar Promo"), width = 12, status = "success",
@@ -130,7 +128,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Hutang ───────────────────────────────────────
+    # Tab: Hutang
     bs4TabItem(tabName = "r_hutang",
       h4(class = "section-title", icon("file-invoice-dollar"), " Hutang Supplier"),
       bs4Card(title = tagList(icon("list"), " Status Hutang Supplier"), width = 12, status = "success",
@@ -138,7 +136,7 @@ reguler_ui_tabs <- function() {
       )
     ),
 
-    # ── Tab: Absensi ──────────────────────────────────────
+    # Tab: Absensi
     bs4TabItem(tabName = "r_absensi",
       fluidRow(
         column(8, h4(class = "section-title", icon("user-clock"), " Absensi Pegawai Reguler")),

@@ -1,20 +1,13 @@
-# ============================================================
-#  helpers.R — Fungsi Utilitas Umum
-# ============================================================
-
 library(scales)
 
-# ── Format angka rupiah ──────────────────────────────────────
 fmt_rupiah <- function(x) {
   paste0("Rp ", format(round(x, 0), big.mark = ".", scientific = FALSE))
 }
 
-# ── Format angka biasa dengan titik ribuan ───────────────────
 fmt_num <- function(x) {
   format(round(x, 0), big.mark = ".", scientific = FALSE)
 }
 
-# ── Badge HTML status hutang ─────────────────────────────────
 badge_hutang <- function(status) {
   color <- switch(status,
     "belum_lunas" = "danger",
@@ -31,7 +24,6 @@ badge_hutang <- function(status) {
   sprintf('<span class="badge badge-%s">%s</span>', color, label)
 }
 
-# ── Badge HTML status harga ──────────────────────────────────
 badge_harga <- function(status) {
   color <- switch(status,
     "pending"  = "warning",
@@ -42,7 +34,6 @@ badge_harga <- function(status) {
   sprintf('<span class="badge badge-%s">%s</span>', color, toupper(status))
 }
 
-# ── Badge HTML status absensi ────────────────────────────────
 badge_absensi <- function(status) {
   color <- switch(status,
     "hadir" = "success",
@@ -54,7 +45,6 @@ badge_absensi <- function(status) {
   sprintf('<span class="badge badge-%s">%s</span>', color, toupper(status))
 }
 
-# ── Badge stok kritis ────────────────────────────────────────
 badge_stok <- function(jumlah, minimal) {
   if (jumlah <= 0) {
     '<span class="badge badge-danger">HABIS</span>'
@@ -65,7 +55,6 @@ badge_stok <- function(jumlah, minimal) {
   }
 }
 
-# ── Sisa hari promo ──────────────────────────────────────────
 sisa_hari_promo <- function(tgl_selesai) {
   if (is.na(tgl_selesai)) return("-")
   sisa <- as.numeric(as.Date(tgl_selesai) - Sys.Date())
@@ -75,7 +64,6 @@ sisa_hari_promo <- function(tgl_selesai) {
   paste0(sisa, " hari lagi")
 }
 
-# ── Warna tema per role ──────────────────────────────────────
 role_color <- function(role) {
   switch(role,
     "gudang"  = "#6366F1",

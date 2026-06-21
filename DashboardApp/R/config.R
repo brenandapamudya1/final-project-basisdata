@@ -1,8 +1,5 @@
-# ============================================================
-#  config.R — Koneksi ke 3 Database MySQL
-#  Host diambil dari environment variable (Docker) atau
-#  fallback ke "localhost" untuk development lokal.
-# ============================================================
+# koneksi ke 3 database MySQL
+# DB_HOST/PORT/PASSWORD dari env var (Docker), fallback ke localhost
 
 library(DBI)
 library(RMariaDB)
@@ -12,7 +9,7 @@ DB_PORT <- as.integer(Sys.getenv("DB_PORT", unset = "3306"))
 DB_PASS <- Sys.getenv("DB_PASSWORD", unset = "Brenanda17")
 DB_USER <- "root"
 
-# ── Fungsi koneksi (buat koneksi baru tiap dipanggil) ────────
+# fungsi koneksi per database
 get_con_gudang <- function() {
   dbConnect(
     RMariaDB::MariaDB(),
@@ -46,7 +43,7 @@ get_con_reguler <- function() {
   )
 }
 
-# ── Helper: jalankan query & auto-disconnect ─────────────────
+# helper: jalankan query & auto-disconnect
 query_db <- function(con_fn, sql, ...) {
   con <- con_fn()
   on.exit(dbDisconnect(con))

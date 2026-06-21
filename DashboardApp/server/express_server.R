@@ -1,6 +1,4 @@
-# ============================================================
-#  express_server.R — Server Logic untuk Admin Express (Premium)
-# ============================================================
+# Server Logic untuk Admin Express (Premium)
 
 express_server <- function(input, output, session) {
 
@@ -115,7 +113,7 @@ express_server <- function(input, output, session) {
     datatable(d, escape=FALSE, rownames=FALSE, options=list(pageLength=10,scrollX=TRUE))
   })
 
-  # ── MODAL: Tambah Promo ─────────────────────────────────────
+  # MODAL: Tambah Promo
   observeEvent(input$btn_add_promo_e, {
     barang_choices <- q_express_get_barang_promo()
     choices_list <- setNames(barang_choices$id_barang, paste0(barang_choices$id_barang, " - ", barang_choices$nama_barang))
@@ -158,7 +156,7 @@ express_server <- function(input, output, session) {
     })
   })
 
-  # ── MODAL: Input Absensi ────────────────────────────────────
+  # MODAL: Input Absensi
   observeEvent(input$btn_add_absensi_e, {
     peg_choices <- q_express_get_pegawai()
     peg_list <- setNames(peg_choices$id_pegawai, peg_choices$nama)
@@ -196,7 +194,7 @@ express_server <- function(input, output, session) {
     })
   })
 
-  # ── MODAL: Transaksi POS ─────────────────────────────────────
+  # MODAL: Transaksi POS
   observeEvent(input$btn_add_pos_e, {
     cust_choices <- q_express_get_customer()
     cust_list <- c("Walk-in (Tanpa Member)" = "")
